@@ -1,0 +1,42 @@
+server:
+  port: ${PORT:8761}
+
+---
+
+spring:
+  profiles: peer1
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    non-secure-port: 80
+    non-secure-port-enabled: true
+    home-page-url-path: ${eureka.instance.hostname}
+    status-page-url-path: ${management.context-path}/info
+    health-check-url-path: ${management.context-path}/info
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${peer.url}/eureka #${vcap.services.discovery-server-eureka-peer2-ups.credentials.url:localhost}/eureka
+  server:
+    wait-time-in-ms-when-sync-empty: 0
+    
+---
+
+spring:
+  profiles: peer2
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    non-secure-port: 80
+    non-secure-port-enabled: true
+    home-page-url-path: ${eureka.instance.hostname}
+    status-page-url-path: ${management.context-path}/info
+    health-check-url-path: ${management.context-path}/info
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${peer.url}/eureka #${vcap.services.discovery-server-eureka-peer1-ups.credentials.url:localhost}/eureka
+  server:
+    wait-time-in-ms-when-sync-empty: 0
